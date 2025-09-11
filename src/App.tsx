@@ -11,88 +11,7 @@ import {
 } from './data/projectProgressData';
 import { useProjectData } from './hooks/useProjectData';
 import { validateField, ValidationError } from './utils/validation';
-import { ProgressTimeline } from './components/ProgressTimeline';
-import { FinancialAnalysisPanel } from './components/FinancialAnalysisPanel';
-import { RiskManagementPanel } from './components/RiskManagementPanel';
-import { SimplifiedSchedule } from './components/SimplifiedSchedule';
-
-interface EditableFieldProps {
-  value: string | number;
-  onSave: (value: string) => void;
-  type?: 'text' | 'number' | 'select' | 'currency';
-  options?: readonly string[];
-  placeholder?: string;
-  className?: string;
-}
-
-const EditableField: React.FC<EditableFieldProps> = ({ 
-  value, 
-  onSave, 
-  type = 'text', 
-  options, 
-  placeholder, 
-  className = '' 
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState(value.toString());
-
-  const handleSave = () => {
-    onSave(editValue);
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setEditValue(value.toString());
-    setIsEditing(false);
-  };
-
-  if (isEditing) {
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        {type === 'select' && options ? (
-          <select 
-            value={editValue} 
-            onChange={(e) => setEditValue(e.target.value)}
-            className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {options.map(option => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type={type === 'currency' ? 'number' : type}
-            value={editValue}
-            onChange={(e) => setEditValue(e.target.value)}
-            placeholder={placeholder}
-            className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            step={type === 'currency' ? '0.01' : undefined}
-          />
-        )}
-        <button onClick={handleSave} className="text-green-600 hover:text-green-800">
-          <Save size={16} />
-        </button>
-        <button onClick={handleCancel} className="text-red-600 hover:text-red-800">
-          ×
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className={`flex items-center gap-2 group ${className}`}>
-      <span className="text-gray-900">
-        {type === 'currency' ? formatCurrency(Number(value)) : value}
-      </span>
-      <button 
-        onClick={() => setIsEditing(true)}
-        className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-600 transition-opacity"
-      >
-        <Edit3 size={14} />
-      </button>
-    </div>
-  );
-};
+import { DualCircularProgress } from './components/DualCircularProgress';
 
 function App() {
   const { 
@@ -112,57 +31,6 @@ function App() {
     addRisk,
     removeRisk
   } = useProjectData();
-  
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
-  const [showValidationErrors, setShowValidationErrors] = useState(false);
-  const [scheduleMonths, setScheduleMonths] = useState([
-    { id: 'month-1', name: 'Julho', order: 0 },
-    { id: 'month-2', name: 'Agosto', order: 1 },
-    { id: 'month-3', name: 'Setembro', order: 2 }
-  ]);
-  const [scheduleEvents, setScheduleEvents] = useState([
-    {
-      id: 'event-1',
-      name: 'Estudo Preliminar',
-      type: 'activity' as const,
-      startDate: 'Julho',
-      endDate: 'Agosto',
-      responsible: 'Equipe Técnica',
-      status: 'in_progress' as const
-    },
-    {
-      id: 'event-2',
-      name: 'TAE01',
-      type: 'milestone' as const,
-      date: 'Agosto',
-      responsible: 'Coordenador',
-      status: 'pending' as const
-    }
-  ]);
-
-  const handleFieldUpdate = (section: keyof ProjectData | null, field: string, value: any) => {
-    // Validar o campo antes de atualizar
-    const error = validateField(section, field, value);
-    
-    // Remover erro anterior deste campo
-    setValidationErrors(prev => 
-      prev.filter(e => !(e.field === field && e.section === section))
-    );
-    
-    // Adicionar novo erro se existir
-    if (error) {
-      setValidationErrors(prev => [...prev, error]);
-    }
-    
-    // Atualizar o valor
-    if (section) {
-      updateProjectData(section, field, value);
-    } else {
-      updateSimpleField(field as keyof ProjectData, value);
-    }
-  };
-
-
 
   if (isLoading) {
     return (
@@ -176,225 +44,298 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Cabeçalho Principal - Formato da Imagem */}
-      <div className="bg-white shadow-sm border-b border-gray-200 mb-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">OPR</span>
-              </div>
-              <h1 className="text-xl font-bold text-gray-900">OPR - Projetos</h1>
-            </div>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => {
-                  if (confirm('Tem certeza que deseja resetar todos os dados para os valores padrão?')) {
-                    resetToDefault();
-                    setValidationErrors([]);
-                  }
-                }}
-                className="flex items-center gap-2 px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
-                title="Resetar para dados padrão"
-              >
-                Reset
-              </button>
+    <div className="min-h-screen bg-white p-8 max-w-[210mm] mx-auto" style={{ fontFamily: 'Arial, sans-serif' }}>
+      {/* Cabeçalho Principal */}
+      <div className="flex justify-between items-start mb-8">
+        <div>
+          <h1 className="text-4xl font-bold text-gray-700 mb-6">OPR - Projetos</h1>
+          
+          {/* Seção Equipe */}
+          <div className="mb-6">
+            <h2 className="text-lg font-bold text-gray-800 mb-3">EQUIPE</h2>
+            <div className="text-sm text-gray-700 space-y-1">
+              <div><span className="font-medium">Projetista:</span> {projectData.equipe.projetista}</div>
+              <div><span className="font-medium">Orçamentista:</span> {projectData.equipe.orcamentista}</div>
+              <div><span className="font-medium">Engenheiro Fiscal:</span> {projectData.equipe.engenheiro_fiscal}</div>
+              <div><span className="font-medium">PMO:</span> {projectData.equipe.pmo}</div>
             </div>
           </div>
-          
-          {/* Layout de 3 colunas como na imagem */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Coluna 1: EQUIPE */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">🏢 EQUIPE</h3>
-              <div className="space-y-2 text-sm">
-                <div>
-                  <span className="text-gray-600">Projetista:</span>
-                  <div className="font-medium">{projectData.equipe.projetista || 'Não definido'}</div>
-                </div>
-                <div>
-                  <span className="text-gray-600">Orçamentista:</span>
-                  <div className="font-medium">{projectData.equipe.orcamentista || 'Não definido'}</div>
-                </div>
-                <div>
-                  <span className="text-gray-600">Eng. Fiscal:</span>
-                  <div className="font-medium">{projectData.equipe.engenheiro_fiscal || 'Não definido'}</div>
-                </div>
-                <div>
-                  <span className="text-gray-600">PMO:</span>
-                  <div className="font-medium">{projectData.equipe.pmo || 'Não definido'}</div>
-                </div>
+
+          {/* Seção Informações */}
+          <div className="mb-6">
+            <h2 className="text-lg font-bold text-gray-800 mb-3">Informações</h2>
+            <div className="space-y-2">
+              <div className="flex items-center">
+                <span className="text-gray-600 w-24">Fases</span>
+                <span className="text-2xl font-bold text-blue-600">{projectData.informacoes.numero_fases} Fases</span>
               </div>
-            </div>
-            
-            {/* Coluna 2: INFORMAÇÕES */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">ℹ️ INFORMAÇÕES</h3>
-              <div className="space-y-2 text-sm">
-                <div>
-                  <span className="text-gray-600">Entidade:</span>
-                  <div className="font-medium">{projectData.organizacao.entidade || 'Não definido'}</div>
-                </div>
-                <div>
-                  <span className="text-gray-600">Unidade:</span>
-                  <div className="font-medium">{projectData.organizacao.unidade || 'Não definido'}</div>
-                </div>
-                <div>
-                  <span className="text-gray-600">Status:</span>
-                  <div className="font-medium">{projectData.informacoes.status || 'Não definido'}</div>
-                </div>
-                <div>
-                  <span className="text-gray-600">Fase:</span>
-                  <div className="font-medium">{projectData.informacoes.fase_atual || 'Não definido'}</div>
-                </div>
+              <div className="flex items-center">
+                <span className="text-gray-600 w-24">Fase Projeto</span>
+                <span className="text-blue-600 font-medium">{projectData.informacoes.fase_atual}</span>
               </div>
-            </div>
-            
-            {/* Coluna 3: DETALHES DA ORGANIZAÇÃO */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">🏛️ DETALHES DA ORGANIZAÇÃO</h3>
-              <div className="space-y-2 text-sm">
-                <div>
-                  <span className="text-gray-600">Entidade:</span>
-                  <div className="font-medium">{projectData.organizacao.entidade || 'Não definido'}</div>
-                </div>
-                <div>
-                  <span className="text-gray-600">Unidade:</span>
-                  <div className="font-medium">{projectData.organizacao.unidade || 'Não definido'}</div>
-                </div>
-                <div>
-                  <span className="text-gray-600">Investimento:</span>
-                  <div className="font-medium">{formatCurrency(projectData.organizacao.investimento_total)}</div>
-                </div>
+              <div className="flex items-center">
+                <span className="text-gray-600 w-24">Status</span>
+                <span className="text-blue-600 font-medium">{projectData.informacoes.status}</span>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Lado Direito - Links e Entidade */}
+        <div className="text-right">
+          <div className="text-gray-600 mb-4">JULHO 2025</div>
           
-          {/* Links Rápidos */}
-          <div className="mt-4 bg-blue-50 rounded-lg p-3">
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">🔗 LINKS RÁPIDOS</h3>
-            <div className="flex gap-4 text-sm">
-              <a href={projectData.links.monday_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                <Link2 size={14} />
-                Monday
-              </a>
-              <a href={projectData.links.dash_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                <Link2 size={14} />
-                Dashboard
-              </a>
+          <div className="mb-6">
+            <div className="text-sm text-gray-600 mb-2">
+              <div>LINK: <a href={projectData.links.monday_url} className="text-blue-600 underline">AVCB - Monday</a></div>
+              <div>LINK 2: <a href={projectData.links.dash_url} className="text-blue-600 underline">DASH - Monday</a></div>
+            </div>
+          </div>
+
+          <div className="text-right space-y-2">
+            <div>
+              <span className="text-gray-600">ENTIDADE</span>
+              <div className="text-2xl font-bold text-blue-600">{projectData.organizacao.entidade}</div>
+            </div>
+            <div>
+              <span className="text-gray-600">UNIDADE</span>
+              <div className="text-2xl font-bold text-blue-600">{projectData.organizacao.unidade}</div>
+            </div>
+            <div>
+              <span className="text-gray-600">INVESTIMENTO</span>
+              <div className="text-xl font-bold text-blue-600">{formatCurrency(projectData.organizacao.investimento_total)}</div>
             </div>
           </div>
         </div>
       </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      {/* Painel de Validação */}
-      {validationErrors.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <AlertCircle className="text-red-500" size={20} />
-              <h3 className="text-red-800 font-semibold">Erros de Validação</h3>
-            </div>
-            <button
-              onClick={() => setShowValidationErrors(!showValidationErrors)}
-              className="text-red-600 hover:text-red-800 text-sm"
-            >
-              {showValidationErrors ? 'Ocultar' : 'Mostrar'} detalhes
-            </button>
-          </div>
-          {showValidationErrors && (
-            <div className="space-y-2">
-              {validationErrors.map((error, index) => (
-                <div key={index} className="text-sm text-red-700 bg-red-100 p-2 rounded">
-                  <strong>{error.section ? `${error.section}.${error.field}` : error.field}:</strong> {error.message}
-                </div>
-              ))}
-            </div>
-          )}
+      {/* Legenda */}
+      <div className="flex justify-end items-center gap-6 mb-6">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full border-2 border-blue-500"></div>
+          <span className="text-sm text-gray-600">Previsto (Externo)</span>
         </div>
-      )}
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full border-2 border-green-500"></div>
+          <span className="text-sm text-gray-600">Realizado (Interno)</span>
+        </div>
+      </div>
 
+      {/* Timeline de Progresso */}
+      <div className="mb-8">
+        {/* Medidores circulares superiores */}
+        <div className="flex justify-between items-center mb-4">
+          {projectData.progress_phases.slice(0, 6).map((phase, index) => (
+            <div key={phase.id} className="flex flex-col items-center">
+              <div className="text-lg font-bold text-gray-700 mb-1">{phase.previsto}%</div>
+              <DualCircularProgress
+                previsto={phase.previsto}
+                realizado={phase.realizado}
+                size={80}
+                showPercentage={false}
+              />
+              <div className="text-xs text-center mt-2 max-w-[80px] leading-tight">
+                {phase.name}
+              </div>
+            </div>
+          ))}
+        </div>
 
+        {/* Linha do tempo */}
+        <div className="relative my-8">
+          <div className="absolute h-1 bg-blue-300 left-0 right-0 top-1/2 transform -translate-y-1/2"></div>
+          <div className="flex justify-between relative">
+            {projectData.progress_phases.slice(0, 6).map((phase, index) => (
+              <div key={phase.id} className="w-4 h-4 rounded-full bg-blue-600 z-10 relative"></div>
+            ))}
+          </div>
+        </div>
 
-        {/* ONE PAGE REPORT - Todas as informações em uma única página */}
-         
-         {/* Resumo Executivo */}
-         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-           <h2 className="text-xl font-semibold text-gray-900 mb-4">📊 Resumo Executivo</h2>
-           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-             <div className="text-center p-4 bg-blue-50 rounded-lg">
-               <div className="text-2xl font-bold text-blue-600">{projectData.informacoes.numero_fases}</div>
-               <div className="text-sm text-gray-600">Fases Totais</div>
-             </div>
-             <div className="text-center p-4 bg-green-50 rounded-lg">
-               <div className="text-lg font-semibold text-green-600">{projectData.informacoes.fase_atual}</div>
-               <div className="text-sm text-gray-600">Fase Atual</div>
-             </div>
-             <div className="text-center p-4 bg-yellow-50 rounded-lg">
-               <div className="text-lg font-semibold text-yellow-600">{projectData.informacoes.status}</div>
-               <div className="text-sm text-gray-600">Status</div>
-             </div>
-             <div className="text-center p-4 bg-purple-50 rounded-lg">
-               <div className="text-lg font-semibold text-purple-600">{formatCurrency(projectData.organizacao.investimento_total)}</div>
-               <div className="text-sm text-gray-600">Investimento</div>
-             </div>
-           </div>
-         </div>
+        {/* Medidores circulares inferiores */}
+        <div className="flex justify-between items-center">
+          {projectData.progress_phases.slice(6).map((phase, index) => (
+            <div key={phase.id} className="flex flex-col items-center">
+              <div className="text-xs text-center mb-2 max-w-[80px] leading-tight">
+                {phase.name}
+              </div>
+              <DualCircularProgress
+                previsto={phase.previsto}
+                realizado={phase.realizado}
+                size={80}
+                showPercentage={false}
+              />
+              <div className="text-lg font-bold text-gray-700 mt-1">{phase.previsto}%</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-         {/* Visualização de Progresso - Layout Horizontal */}
-         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-           <ProgressTimeline
-             phases={projectData.progress_phases}
-             onUpdatePhase={updatePhase}
-             onAddPhase={addPhase}
-             onRemovePhase={removePhase}
-             onReorderPhases={reorderPhases}
-           />
-         </div>
+      {/* Seção Financeira */}
+      <div className="grid grid-cols-2 gap-8 mb-8">
+        {/* Estimativas */}
+        <div>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className="font-medium">Estimativa Preliminar</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold">{formatCurrency(projectData.financial_estimates.estimativa_preliminar)}</span>
+                <div className="flex items-center text-red-600">
+                  <span className="text-lg">▼</span>
+                  <span className="text-sm font-medium">3%</span>
+                </div>
+              </div>
+            </div>
 
-         {/* Análise Financeira - Layout Completo */}
-         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-           <FinancialAnalysisPanel
-             estimates={projectData.financial_estimates || {
-               estimativa_preliminar: 0,
-               estimativa_preliminar_02: 0,
-               estimativa_inicial: 0,
-               estimativa_final: 0
-             }}
-             budgets={projectData.financial_budgets || {
-               orcamento_primeira_fase: 0,
-               orcamento_segunda_fase: 0,
-               orcamento_analitico_total: 0
-             }}
-             totalInvestment={projectData.organizacao?.investimento_total || 0}
-             onUpdateEstimate={updateFinancialEstimate}
-             onUpdateBudget={updateFinancialBudget}
-           />
-         </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className="font-medium">Estimativa Preliminar02</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold">x</span>
+                <div className="flex items-center text-green-600">
+                  <span className="text-lg">▲</span>
+                  <span className="text-sm font-medium">16%</span>
+                </div>
+              </div>
+            </div>
 
-         {/* Layout em Grid - 2 Colunas: Cronograma e Riscos */}
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-           {/* Cronograma Simplificado */}
-           <SimplifiedSchedule
-             months={scheduleMonths}
-             events={scheduleEvents}
-             onUpdateMonths={setScheduleMonths}
-             onUpdateEvents={setScheduleEvents}
-           />
-           
-           {/* Gestão de Riscos Editável */}
-           <RiskManagementPanel
-             risks={projectData.risks || []}
-             onUpdateRisk={updateRisk}
-             onAddRisk={addRisk}
-             onDeleteRisk={removeRisk}
-           />
-         </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className="font-medium">Estimativa Inicial</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold">y</span>
+                <div className="flex items-center text-green-600">
+                  <span className="text-lg">▲</span>
+                  <span className="text-sm font-medium">11%</span>
+                </div>
+              </div>
+            </div>
 
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className="font-medium">Estimativa Final</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold">z</span>
+                <div className="flex items-center text-green-600">
+                  <span className="text-lg">▲</span>
+                  <span className="text-sm font-medium">9%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        {/* Orçamentos */}
+        <div>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className="font-medium">Orçamento 1ª Fase</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold">x</span>
+                <div className="flex items-center text-red-600">
+                  <span className="text-lg">▼</span>
+                  <span className="text-sm font-medium">3%</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className="font-medium">Orçamento 2ª Fase</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold">y</span>
+                <div className="flex items-center text-green-600">
+                  <span className="text-lg">▲</span>
+                  <span className="text-sm font-medium">16%</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className="font-medium">Orçamento 3ª Fase</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold">z</span>
+                <div className="flex items-center text-green-600">
+                  <span className="text-lg">▲</span>
+                  <span className="text-sm font-medium">11%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Seção Cronograma e Riscos */}
+      <div className="grid grid-cols-2 gap-8">
+        {/* Cronograma */}
+        <div>
+          <div className="flex justify-between items-center mb-4">
+            <span className="font-bold text-lg">Julho</span>
+            <span className="font-bold text-lg">Agosto</span>
+            <span className="font-bold text-lg">Setembro</span>
+          </div>
+          
+          <div className="relative bg-gray-50 p-4 rounded">
+            <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-gray-300"></div>
+            <div className="relative flex justify-between items-center">
+              <div className="w-2 h-2 rounded-full bg-gray-600"></div>
+              <div className="w-2 h-2 rounded-full bg-gray-600"></div>
+              <div className="w-2 h-2 rounded-full bg-gray-600"></div>
+            </div>
+            
+            <div className="mt-4">
+              <div className="bg-green-500 text-white px-3 py-1 rounded text-sm inline-block">
+                Estudo Preliminar
+              </div>
+            </div>
+            
+            <div className="mt-2 flex justify-center">
+              <div className="bg-orange-500 text-white px-2 py-1 rounded text-xs">
+                🏁 TAE01
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Riscos */}
+        <div>
+          <div className="bg-red-100 p-4 rounded">
+            <h3 className="text-center font-bold text-lg mb-4 bg-red-300 py-2 rounded">RISCOS</h3>
+            
+            <div className="space-y-3">
+              <div>
+                <div className="font-bold text-gray-700 mb-1">Complementares não contratados</div>
+              </div>
+              
+              <div>
+                <div className="text-sm text-gray-600">
+                  Atraso nas fases devido à solicitação de mudanças de layout e definição de terreno.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Logo FIEB no canto inferior direito */}
+      <div className="flex justify-end mt-8">
+        <div className="text-blue-600 font-bold text-sm">FIEB</div>
       </div>
     </div>
   );

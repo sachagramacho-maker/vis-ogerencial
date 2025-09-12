@@ -46,65 +46,104 @@ function App() {
   return (
     <div className="min-h-screen bg-white p-8 max-w-[210mm] mx-auto" style={{ fontFamily: 'Arial, sans-serif' }}>
       {/* Cabeçalho Principal */}
-      <div className="flex justify-between items-start mb-8">
-        <div>
-          <h1 className="text-4xl font-bold text-gray-700 mb-6">OPR - Projetos</h1>
-          
-          {/* Seção Equipe */}
-          <div className="mb-6">
-            <h2 className="text-lg font-bold text-gray-800 mb-3">EQUIPE</h2>
-            <div className="text-sm text-gray-700 space-y-1">
-              <div><span className="font-medium">Projetista:</span> {projectData.equipe.projetista}</div>
-              <div><span className="font-medium">Orçamentista:</span> {projectData.equipe.orcamentista}</div>
-              <div><span className="font-medium">Engenheiro Fiscal:</span> {projectData.equipe.engenheiro_fiscal}</div>
-              <div><span className="font-medium">PMO:</span> {projectData.equipe.pmo}</div>
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-4xl font-bold text-gray-700">OPR - Projetos</h1>
+          <div className="text-gray-600">JULHO 2025</div>
+        </div>
+        
+        {/* Seção Informacional - Três Colunas */}
+        <div className="grid grid-cols-3 gap-8 mb-6">
+          {/* Coluna 1 - EQUIPE */}
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="flex items-center gap-2 mb-4">
+              <Users className="text-blue-600" size={20} />
+              <h2 className="text-lg font-bold text-gray-800">EQUIPE</h2>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div>
+                <span className="text-gray-600">Projetista:</span>
+                <div className="font-semibold text-gray-800">{projectData.equipe.projetista}</div>
+              </div>
+              <div>
+                <span className="text-gray-600">Orçamentista:</span>
+                <div className="font-semibold text-gray-800">{projectData.equipe.orcamentista}</div>
+              </div>
+              <div>
+                <span className="text-gray-600">Eng. Fiscal:</span>
+                <div className="font-semibold text-gray-800">{projectData.equipe.engenheiro_fiscal}</div>
+              </div>
+              <div>
+                <span className="text-gray-600">PMO:</span>
+                <div className="font-semibold text-gray-800">{projectData.equipe.pmo}</div>
+              </div>
             </div>
           </div>
 
-          {/* Seção Informações */}
-          <div className="mb-6">
-            <h2 className="text-lg font-bold text-gray-800 mb-3">Informações</h2>
-            <div className="space-y-2">
-              <div className="flex items-center">
-                <span className="text-gray-600 w-24">Fases</span>
-                <span className="text-2xl font-bold text-blue-600">{projectData.informacoes.numero_fases} Fases</span>
+          {/* Coluna 2 - INFORMAÇÕES */}
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="flex items-center gap-2 mb-4">
+              <Target className="text-blue-600" size={20} />
+              <h2 className="text-lg font-bold text-gray-800">INFORMAÇÕES</h2>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div>
+                <span className="text-gray-600">Entidade:</span>
+                <div className="font-semibold text-blue-600">{projectData.organizacao.entidade}</div>
               </div>
-              <div className="flex items-center">
-                <span className="text-gray-600 w-24">Fase Projeto</span>
-                <span className="text-blue-600 font-medium">{projectData.informacoes.fase_atual}</span>
+              <div>
+                <span className="text-gray-600">Unidade:</span>
+                <div className="font-semibold text-blue-600">{projectData.organizacao.unidade}</div>
               </div>
-              <div className="flex items-center">
-                <span className="text-gray-600 w-24">Status</span>
-                <span className="text-blue-600 font-medium">{projectData.informacoes.status}</span>
+              <div>
+                <span className="text-gray-600">Status:</span>
+                <div className="font-semibold text-gray-800">{projectData.informacoes.status}</div>
+              </div>
+              <div>
+                <span className="text-gray-600">Fase:</span>
+                <div className="font-semibold text-gray-800">{projectData.informacoes.fase_atual}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Coluna 3 - DETALHES DA ORGANIZAÇÃO */}
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="flex items-center gap-2 mb-4">
+              <Building className="text-blue-600" size={20} />
+              <h2 className="text-lg font-bold text-gray-800">DETALHES DA ORGANIZAÇÃO</h2>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div>
+                <span className="text-gray-600">Entidade:</span>
+                <div className="font-semibold text-blue-600">{projectData.organizacao.entidade}</div>
+              </div>
+              <div>
+                <span className="text-gray-600">Unidade:</span>
+                <div className="font-semibold text-blue-600">{projectData.organizacao.unidade}</div>
+              </div>
+              <div>
+                <span className="text-gray-600">Investimento:</span>
+                <div className="font-semibold text-blue-600">{formatCurrency(projectData.organizacao.investimento_total)}</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Lado Direito - Links e Entidade */}
-        <div className="text-right">
-          <div className="text-gray-600 mb-4">JULHO 2025</div>
-          
-          <div className="mb-6">
-            <div className="text-sm text-gray-600 mb-2">
-              <div>LINK: <a href={projectData.links.monday_url} className="text-blue-600 underline">AVCB - Monday</a></div>
-              <div>LINK 2: <a href={projectData.links.dash_url} className="text-blue-600 underline">DASH - Monday</a></div>
-            </div>
+        {/* Links Rápidos */}
+        <div className="bg-purple-50 p-4 rounded-lg">
+          <div className="flex items-center gap-2 mb-3">
+            <Link2 className="text-purple-600" size={20} />
+            <h3 className="font-bold text-gray-800">LINKS RÁPIDOS</h3>
           </div>
-
-          <div className="text-right space-y-2">
-            <div>
-              <span className="text-gray-600">ENTIDADE</span>
-              <div className="text-2xl font-bold text-blue-600">{projectData.organizacao.entidade}</div>
-            </div>
-            <div>
-              <span className="text-gray-600">UNIDADE</span>
-              <div className="text-2xl font-bold text-blue-600">{projectData.organizacao.unidade}</div>
-            </div>
-            <div>
-              <span className="text-gray-600">INVESTIMENTO</span>
-              <div className="text-xl font-bold text-blue-600">{formatCurrency(projectData.organizacao.investimento_total)}</div>
-            </div>
+          <div className="flex gap-6">
+            <a href={projectData.links.monday_url} className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm">
+              <span>🔗</span>
+              <span>Monday</span>
+            </a>
+            <a href={projectData.links.dash_url} className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm">
+              <span>📊</span>
+              <span>Dashboard</span>
+            </a>
           </div>
         </div>
       </div>

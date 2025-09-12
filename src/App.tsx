@@ -210,109 +210,126 @@ function App() {
       </div>
 
       {/* Seção Financeira */}
-      <div className="grid grid-cols-2 gap-8 mb-8">
-        {/* Estimativas */}
-        <div>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span className="font-medium">Estimativa Preliminar</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold">{formatCurrency(projectData.financial_estimates.estimativa_preliminar)}</span>
-                <div className="flex items-center text-red-600">
-                  <span className="text-lg">▼</span>
-                  <span className="text-sm font-medium">3%</span>
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-6">
+          <DollarSign className="text-green-600" size={24} />
+          <h2 className="text-xl font-bold text-gray-800">Análise Financeira</h2>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-8">
+          {/* Estimativas */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-4">Estimativas</h3>
+            <div className="space-y-4">
+              {/* Estimativa Preliminar */}
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="text-sm text-gray-600 mb-1">Estimativa Preliminar</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-lg font-bold text-gray-800">
+                    {formatCurrency(projectData.financial_estimates.estimativa_preliminar)}
+                  </div>
+                  <div className="flex items-center text-green-600">
+                    <span className="text-lg mr-1">▲</span>
+                    <span className="text-sm font-medium">100.0%</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span className="font-medium">Estimativa Preliminar02</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold">x</span>
-                <div className="flex items-center text-green-600">
-                  <span className="text-lg">▲</span>
-                  <span className="text-sm font-medium">16%</span>
+              {/* Estimativa Inicial */}
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="text-sm text-gray-600 mb-1">Estimativa Inicial</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-lg font-bold text-gray-800">R$ 0,00</div>
+                  <div className="flex items-center text-red-600">
+                    <span className="text-lg mr-1">▼</span>
+                    <span className="text-sm font-medium">0.0%</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span className="font-medium">Estimativa Inicial</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold">y</span>
-                <div className="flex items-center text-green-600">
-                  <span className="text-lg">▲</span>
-                  <span className="text-sm font-medium">11%</span>
+              {/* Estimativa Preliminar 02 */}
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="text-sm text-gray-600 mb-1">Estimativa Preliminar 02</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-lg font-bold text-gray-800">R$ 0,00</div>
+                  <div className="flex items-center text-red-600">
+                    <span className="text-lg mr-1">▼</span>
+                    <span className="text-sm font-medium">0.0%</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span className="font-medium">Estimativa Final</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold">z</span>
-                <div className="flex items-center text-green-600">
-                  <span className="text-lg">▲</span>
-                  <span className="text-sm font-medium">9%</span>
+              {/* Estimativa Final */}
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="text-sm text-blue-600 mb-1 font-medium">Estimativa Final</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-lg font-bold text-blue-800">R$ 0,00</div>
+                  <div className="flex items-center text-red-600">
+                    <span className="text-lg mr-1">▼</span>
+                    <span className="text-sm font-medium">0.0%</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Orçamentos */}
-        <div>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span className="font-medium">Orçamento 1ª Fase</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold">x</span>
-                <div className="flex items-center text-red-600">
-                  <span className="text-lg">▼</span>
-                  <span className="text-sm font-medium">3%</span>
+          {/* Orçamentos */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-4">Orçamentos</h3>
+            <div className="space-y-4">
+              {/* Orçamento 1ª Fase */}
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="text-sm text-gray-600 mb-1">Orçamento 1ª Fase</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-lg font-bold text-gray-800">R$ 0,00</div>
+                  <div className="flex items-center text-red-600">
+                    <span className="text-lg mr-1">▼</span>
+                    <span className="text-sm font-medium">0.0%</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span className="font-medium">Orçamento 2ª Fase</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold">y</span>
-                <div className="flex items-center text-green-600">
-                  <span className="text-lg">▲</span>
-                  <span className="text-sm font-medium">16%</span>
+              {/* Orçamento 2ª Fase */}
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="text-sm text-gray-600 mb-1">Orçamento 2ª Fase</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-lg font-bold text-gray-800">R$ 0,00</div>
+                  <div className="flex items-center text-red-600">
+                    <span className="text-lg mr-1">▼</span>
+                    <span className="text-sm font-medium">0.0%</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span className="font-medium">Orçamento 3ª Fase</span>
+              {/* Orçamento Analítico Total */}
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="text-sm text-blue-600 mb-1 font-medium">Orçamento Analítico Total</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-lg font-bold text-blue-800">R$ 0,00</div>
+                  <div className="flex items-center text-red-600">
+                    <span className="text-lg mr-1">▼</span>
+                    <span className="text-sm font-medium">0.0%</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold">z</span>
-                <div className="flex items-center text-green-600">
-                  <span className="text-lg">▲</span>
-                  <span className="text-sm font-medium">11%</span>
+
+              {/* Margem de Erro */}
+              <div className="mt-6 p-6 bg-green-50 rounded-lg border border-green-200">
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <CheckCircle className="text-green-600" size={20} />
+                    <div className="text-sm font-semibold text-gray-700">
+                      MARGEM DE ERRO DA ESTIMATIVA FINAL
+                    </div>
+                  </div>
+                  <div className="text-3xl font-bold text-green-600 mb-2">0.00%</div>
+                  <div className="text-xs text-gray-600 mb-1">
+                    Diferença entre Estimativa Final e Orçamento Analítico Total
+                  </div>
+                  <div className="text-xs text-green-600 font-medium">
+                    Excelente precisão
+                  </div>
+                  <div className="text-xs text-gray-400 mt-2">miro</div>
                 </div>
               </div>
             </div>

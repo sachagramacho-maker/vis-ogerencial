@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Users, Target, Link2, Building, DollarSign, Settings, Save, Edit3, AlertCircle, CheckCircle } from 'lucide-react';
+import { Calendar, Users, Target, Link2, Building, DollarSign, Settings, Save, Edit3, AlertCircle, CheckCircle, AlertTriangle, Trash2 } from 'lucide-react';
 import { 
   ProjectData, 
   statusOptions, 

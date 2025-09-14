@@ -341,30 +341,59 @@ function App() {
       <div className="grid grid-cols-2 gap-8 mb-8">
         {/* Cronograma */}
         <div>
-          <div className="flex justify-between items-center mb-4">
-            <span className="font-bold text-lg">Julho</span>
-            <span className="font-bold text-lg">Agosto</span>
-            <span className="font-bold text-lg">Setembro</span>
+          <h3 className="text-lg font-bold text-gray-800 mb-4">GANTT TRIMESTRAL</h3>
+          
+          {/* Cabeçalho dos meses */}
+          <div className="grid grid-cols-3 gap-0 mb-4">
+            <div className="border border-gray-400 p-3 text-center bg-white">
+              <span className="font-bold text-xl text-gray-800">Set.25</span>
+            </div>
+            <div className="border border-gray-400 p-3 text-center bg-white">
+              <span className="font-bold text-xl text-gray-800">Out.25</span>
+            </div>
+            <div className="border border-gray-400 p-3 text-center bg-white">
+              <span className="font-bold text-xl text-gray-800">Nov.25</span>
+            </div>
           </div>
           
-          <div className="relative bg-gray-50 p-4 rounded">
-            <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-gray-300"></div>
-            <div className="relative flex justify-between items-center">
-              <div className="w-2 h-2 rounded-full bg-gray-600"></div>
-              <div className="w-2 h-2 rounded-full bg-gray-600"></div>
-              <div className="w-2 h-2 rounded-full bg-gray-600"></div>
-            </div>
+          {/* Área do cronograma */}
+          <div className="relative bg-white p-6 border border-gray-300 min-h-[200px]">
+            {/* Linha do tempo principal */}
+            <div className="absolute left-0 right-0 top-8 h-1 bg-gray-800"></div>
             
-            <div className="mt-4">
-              <div className="bg-green-500 text-white px-3 py-1 rounded text-sm inline-block">
-                Estudo Preliminar
+            {/* Losangos nas extremidades */}
+            <div className="absolute left-0 top-6 w-4 h-4 bg-gray-800 transform rotate-45"></div>
+            <div className="absolute right-0 top-6 w-4 h-4 bg-gray-800 transform rotate-45"></div>
+            
+            {/* Atividades */}
+            <div className="relative pt-12">
+              {/* Estudo Viabilidade */}
+              <div className="absolute left-4 top-4">
+                <div className="bg-purple-300 px-6 py-3 rounded-full shadow-md">
+                  <span className="font-bold text-gray-800 text-lg">Estudo Viabilidade</span>
+                </div>
+              </div>
+              
+              {/* Estimativa Orçamentária 02 */}
+              <div className="absolute left-8 top-20">
+                <div className="bg-green-200 px-8 py-3 rounded-full shadow-md">
+                  <span className="font-bold text-gray-800 text-lg">Estimativa Orçamentária 02</span>
+                </div>
+              </div>
+              
+              {/* TAE01 Marco */}
+              <div className="absolute right-16 bottom-4">
+                <div className="bg-red-200 px-4 py-2 rounded shadow-md">
+                  <span className="font-bold text-gray-800">TAE01</span>
+                </div>
+                {/* Linha vertical do marco */}
+                <div className="absolute left-1/2 top-0 w-0.5 h-8 bg-gray-400 transform -translate-x-1/2 -translate-y-8"></div>
               </div>
             </div>
             
-            <div className="mt-2 flex justify-center">
-              <div className="bg-orange-500 text-white px-2 py-1 rounded text-xs">
-                🏁 TAE01
-              </div>
+            {/* Marca d'água miro */}
+            <div className="absolute bottom-2 right-4 text-gray-300 text-xs">
+              miro
             </div>
           </div>
         </div>

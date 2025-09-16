@@ -7,6 +7,7 @@ interface DualCircularProgressProps {
   size?: number;
   strokeWidth?: number;
   showPercentage?: boolean;
+  showOnlyInternal?: boolean;
   label?: string;
   status?: string;
 }
@@ -17,6 +18,7 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
   size = 120,
   strokeWidth = 8,
   showPercentage = true,
+  showOnlyInternal = false,
   label,
   status
 }) => {
@@ -94,7 +96,7 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
         
         {/* Conteúdo central */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          {showPercentage && (
+          {showPercentage && !showOnlyInternal && (
             <>
               <div className="text-lg font-bold text-gray-900">
                 {realizado}%
@@ -103,6 +105,12 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
                 Meta: {previsto}%
               </div>
             </>
+          )}
+          
+          {showPercentage && showOnlyInternal && (
+            <div className="text-sm font-bold text-gray-900">
+              {realizado}%
+            </div>
           )}
           
           {/* Ícone de status */}

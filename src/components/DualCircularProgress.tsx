@@ -15,8 +15,8 @@ interface DualCircularProgressProps {
 export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
   previsto,
   realizado,
-  size = 120,
-  strokeWidth = 8,
+  size = 70,
+  strokeWidth = 4,
   showPercentage = true,
   showOnlyInternal = false,
   label,
@@ -31,10 +31,15 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
   const realizadoOffset = circumference - (realizado / 100) * circumference;
 
   // Cores
-  const previstoColor = '#16a34a'; // Verde escuro para meta
+  const previstoColor = '#0891b2'; // Azul ciano para meta (externo)
   const realizadoColor = getProgressColor(previsto, realizado);
   const statusColor = status ? getStatusColor(status) : '#6b7280';
   const statusIcon = status ? getStatusIcon(status) : '';
+
+  // Determinar se deve usar cores ativas ou inativas
+  const isActive = previsto > 0 || realizado > 0;
+  const finalPrevistoColor = isActive ? previstoColor : '#d1d5db';
+  const finalRealizadoColor = isActive ? realizadoColor : '#d1d5db';
 
   return (
     <div className="flex flex-col items-center">
@@ -50,7 +55,7 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
             cx={center}
             cy={center}
             r={radius}
-            stroke="#e5e7eb"
+            stroke="#f3f4f6"
             strokeWidth={strokeWidth}
             fill="transparent"
           />
@@ -60,7 +65,7 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
             cx={center}
             cy={center}
             r={radius}
-            stroke={previstoColor}
+            stroke={finalPrevistoColor}
             strokeWidth={strokeWidth}
             fill="transparent"
             strokeDasharray={circumference}
@@ -73,9 +78,9 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
           <circle
             cx={center}
             cy={center}
-            r={radius - strokeWidth - 4}
+            r={radius - strokeWidth - 3}
             stroke="#f3f4f6"
-            strokeWidth={strokeWidth - 2}
+            strokeWidth={strokeWidth - 1}
             fill="transparent"
           />
           
@@ -83,12 +88,12 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
           <circle
             cx={center}
             cy={center}
-            r={radius - strokeWidth - 4}
-            stroke={realizadoColor}
-            strokeWidth={strokeWidth - 2}
+            r={radius - strokeWidth - 3}
+            stroke={finalRealizadoColor}
+            strokeWidth={strokeWidth - 1}
             fill="transparent"
-            strokeDasharray={circumference - (strokeWidth + 4) * 2 * Math.PI / radius}
-            strokeDashoffset={realizadoOffset * (radius - strokeWidth - 4) / radius}
+            strokeDasharray={circumference - (strokeWidth + 3) * 2 * Math.PI / radius}
+            strokeDashoffset={realizadoOffset * (radius - strokeWidth - 3) / radius}
             strokeLinecap="round"
             className="transition-all duration-500 ease-in-out"
           />
@@ -98,7 +103,7 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {showPercentage && !showOnlyInternal && (
             <>
-              <div className="text-lg font-bold text-gray-900">
+              <div className="text-base font-bold text-gray-900">
                 {realizado}%
               </div>
               <div className="text-xs text-gray-500">
@@ -108,7 +113,7 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
           )}
           
           {showPercentage && showOnlyInternal && (
-            <div className="text-sm font-bold text-gray-900">
+            <div className="text-base font-bold text-gray-700">
               {realizado}%
             </div>
           )}
@@ -128,7 +133,7 @@ export const DualCircularProgress: React.FC<DualCircularProgressProps> = ({
       {/* Label */}
       {label && (
         <div className="mt-2 text-center">
-          <div className="text-sm font-medium text-gray-900 max-w-[120px] leading-tight">
+          <div className="text-xs font-medium text-gray-700 max-w-[80px] leading-tight">
             {label}
           </div>
         </div>

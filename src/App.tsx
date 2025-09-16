@@ -174,18 +174,18 @@ function App() {
                 {/* Seta vermelha indicando atividade atual (fase 2 - Contratação de Recursos) */}
                 {index === 1 && (
                   <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                    <div className="text-red-600 text-2xl">↓</div>
+                    <div className="text-red-600 text-xl font-bold">↓</div>
                   </div>
                 )}
                 
                 <DualCircularProgress
                   previsto={phase.previsto}
                   realizado={phase.realizado}
-                  size={60}
+                  size={70}
                   showPercentage={true}
                   showOnlyInternal={true}
                 />
-                <div className="text-xs text-center mt-1 max-w-[60px] leading-tight">
+                <div className="text-xs text-center mt-2 max-w-[70px] leading-tight text-gray-600">
                   {phase.name}
                 </div>
               </div>
@@ -194,19 +194,19 @@ function App() {
 
           {/* Linha do tempo horizontal */}
           <div className="relative my-4">
-            <div className="absolute h-1 bg-blue-400 left-0 right-0 top-1/2 transform -translate-y-1/2"></div>
+            <div className="absolute h-0.5 bg-blue-500 left-0 right-0 top-1/2 transform -translate-y-1/2"></div>
             <div className="flex justify-between relative">
               {Array.from({ length: 12 }).map((_, index) => (
-                <div key={index} className="w-3 h-3 rounded-full bg-blue-600 z-10 relative"></div>
+                <div key={index} className="w-2 h-2 rounded-full bg-blue-600 z-10 relative"></div>
               ))}
             </div>
             
             {/* Setas nas extremidades */}
             <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4">
-              <div className="text-blue-600 text-xl">←</div>
+              <div className="text-blue-600 text-lg">←</div>
             </div>
             <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4">
-              <div className="text-blue-600 text-xl">→</div>
+              <div className="text-blue-600 text-lg">→</div>
             </div>
           </div>
 
@@ -214,25 +214,25 @@ function App() {
           <div className="flex justify-between items-center">
             {projectData.progress_phases.slice(6).map((phase, index) => (
               <div key={phase.id} className="flex flex-col items-center relative">
-                <div className="text-xs text-center mb-1 max-w-[60px] leading-tight">
+                <div className="text-xs text-center mb-2 max-w-[70px] leading-tight text-gray-600">
                   {phase.name}
                 </div>
                 
                 {/* Seta azul indicando próxima atividade (fase 7 - Anteprojeto) */}
                 {index === 1 && (
                   <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-                    <div className="text-blue-600 text-2xl">↑</div>
+                    <div className="text-blue-600 text-xl font-bold">↑</div>
                   </div>
                 )}
                 
                 <DualCircularProgress
                   previsto={phase.previsto}
                   realizado={phase.realizado}
-                  size={60}
+                  size={70}
                   showPercentage={true}
                   showOnlyInternal={true}
                 />
-                <div className="text-sm font-bold text-gray-700 mt-1">{phase.previsto}%</div>
+                <div className="text-sm font-bold text-gray-700 mt-2">{phase.previsto}%</div>
               </div>
             ))}
           </div>

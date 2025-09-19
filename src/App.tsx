@@ -374,55 +374,51 @@ function App() {
           <h3 className="text-lg font-bold text-gray-800 mb-4">GANTT TRIMESTRAL</h3>
           
           {/* Cabeçalho dos meses */}
-          <div className="grid grid-cols-3 gap-0 mb-3">
-            <div className="border border-gray-400 p-3 text-center bg-white">
-              <span className="font-bold text-lg text-gray-800">Set.25</span>
+          <div className="grid grid-cols-3 gap-0 mb-4">
+            <div className="border-2 border-black p-4 text-center bg-white">
+              <span className="font-bold text-xl text-black">Set.25</span>
             </div>
-            <div className="border border-gray-400 p-3 text-center bg-white">
-              <span className="font-bold text-lg text-gray-800">Out.25</span>
+            <div className="border-2 border-black border-l-0 p-4 text-center bg-white">
+              <span className="font-bold text-xl text-black">Out.25</span>
             </div>
-            <div className="border border-gray-400 p-3 text-center bg-white">
-              <span className="font-bold text-lg text-gray-800">Nov.25</span>
+            <div className="border-2 border-black border-l-0 p-4 text-center bg-white">
+              <span className="font-bold text-xl text-black">Nov.25</span>
             </div>
           </div>
           
           {/* Área do cronograma */}
-          <div className="relative bg-white p-4 border border-gray-300 min-h-[140px]">
+          <div className="relative bg-white p-6 min-h-[200px]">
             {/* Linha do tempo principal */}
-            <div className="absolute left-0 right-0 top-6 h-1 bg-gray-800"></div>
+            <div className="absolute left-0 right-0 top-8 h-1 bg-black"></div>
             
             {/* Losangos nas extremidades */}
-            <div className="absolute left-0 top-4 w-4 h-4 bg-gray-800 transform rotate-45"></div>
-            <div className="absolute right-0 top-4 w-4 h-4 bg-gray-800 transform rotate-45"></div>
+            <div className="absolute -left-2 top-6 w-6 h-6 bg-black transform rotate-45"></div>
+            <div className="absolute -right-2 top-6 w-6 h-6 bg-black transform rotate-45"></div>
             
             {/* Atividades */}
-            <div className="relative pt-8">
-              {/* Estudo Viabilidade */}
-              <div className="absolute left-2 top-2">
-                <div className="bg-purple-300 px-4 py-2 rounded-full shadow-md">
-                  <span className="font-bold text-gray-800 text-sm">Estudo Viabilidade</span>
+            <div className="relative pt-12">
+              {/* Estudo de Viabilidade */}
+              <div className="absolute left-8 top-4">
+                <div className="border-2 border-blue-400 bg-white px-6 py-3 rounded-lg shadow-sm">
+                  <span className="font-medium text-black text-sm">Estudo de Viabilidade</span>
                 </div>
               </div>
               
-              {/* Estimativa Orçamentária 02 */}
-              <div className="absolute left-4 top-14">
-                <div className="bg-green-200 px-4 py-2 rounded-full shadow-md">
-                  <span className="font-bold text-gray-800 text-sm">Estimativa Orçamentária 02</span>
+              {/* TAE 02 Marco */}
+              <div className="absolute right-8 top-16">
+                <div className="border-2 border-red-500 bg-white px-6 py-4 rounded-lg shadow-sm">
+                  <div className="text-center">
+                    <div className="font-bold text-black text-sm mb-1">TAE 02</div>
+                    <div className="bg-red-200 px-3 py-1 rounded text-xs font-medium text-black">
+                      MARCO
+                    </div>
+                  </div>
                 </div>
-              </div>
-              
-              {/* TAE01 Marco */}
-              <div className="absolute right-8 bottom-2">
-                <div className="bg-red-200 px-3 py-1 rounded shadow-md">
-                  <span className="font-bold text-gray-800 text-sm">TAE01</span>
-                </div>
-                {/* Linha vertical do marco */}
-                <div className="absolute left-1/2 top-0 w-0.5 h-6 bg-gray-400 transform -translate-x-1/2 -translate-y-6"></div>
               </div>
             </div>
             
             {/* Marca d'água miro */}
-            <div className="absolute bottom-1 right-2 text-gray-300 text-xs">
+            <div className="absolute bottom-2 right-4 text-gray-300 text-sm">
               miro
             </div>
           </div>

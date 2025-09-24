@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Users, Target, Link2, Building, DollarSign, Settings, Save, Edit3, AlertCircle, CheckCircle, AlertTriangle, Trash2 } from 'lucide-react';
+import { MondayTimeline } from './components/MondayTimeline';
+import { useMondayData } from './hooks/useMondayData';
 import { 
   ProjectData, 
   statusOptions, 
@@ -14,6 +16,9 @@ import { validateField, ValidationError } from './utils/validation';
 import { DualCircularProgress } from './components/DualCircularProgress';
 
 function App() {
+  // Hook para dados do Monday.com
+  const { timelineData, isLoading: mondayLoading, error: mondayError, refetch: refetchMonday } = useMondayData();
+  
   const { 
     projectData, 
     isLoading,
@@ -151,93 +156,22 @@ function App() {
       {/* Legenda */}
       <div className="flex justify-end items-center gap-6 mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full border-2 border-blue-500"></div>
-          <span className="text-sm text-gray-600">Previsto (Externo)</span>
+          <div className="w-4 h-4 rounded-full bg-green-500"></div>
+          <span className="text-sm text-gray-600">Previsto (Verde - Externo)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full border-2 border-green-500"></div>
-          <span className="text-sm text-gray-600">Realizado (Interno)</span>
+          <div className="w-4 h-4 rounded-full bg-blue-500"></div>
+          <span className="text-sm text-gray-600">Realizado (Azul - Interno)</span>
         </div>
       </div>
 
-      {/* Timeline de Progresso */}
-      <div className="mb-6">
-        {/* Timeline completa com 12 fases */}
-        <div className="relative">
-          {/* Medidores circulares superiores - 6 fases */}
-          <div className="flex justify-between items-center mb-3">
-            {projectData.progress_phases.slice(0, 6).map((phase, index) => (
-              <div key={phase.id} className="flex flex-col items-center relative">
-                {/* Percentual previsto acima */}
-                <div className="text-sm font-bold text-gray-700 mb-1">{phase.previsto}%</div>
-                
-                {/* Seta vermelha indicando atividade atual (fase 2 - Contratação de Recursos) */}
-                {index === 1 && (
-                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                    <div className="text-red-600 text-xl font-bold">↓</div>
-                  </div>
-                )}
-                
-                <DualCircularProgress
-                  previsto={phase.previsto}
-                  realizado={phase.realizado}
-                  size={70}
-                  showPercentage={true}
-                  showOnlyInternal={true}
-                />
-                <div className="text-xs text-center mt-2 max-w-[70px] leading-tight text-gray-600">
-                  {phase.name}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Linha do tempo horizontal */}
-          <div className="relative my-4">
-            <div className="absolute h-0.5 bg-blue-500 left-0 right-0 top-1/2 transform -translate-y-1/2"></div>
-            <div className="flex justify-between relative">
-              {Array.from({ length: 12 }).map((_, index) => (
-                <div key={index} className="w-2 h-2 rounded-full bg-blue-600 z-10 relative"></div>
-              ))}
-            </div>
-            
-            {/* Setas nas extremidades */}
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4">
-              <div className="text-blue-600 text-lg">←</div>
-            </div>
-            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4">
-              <div className="text-blue-600 text-lg">→</div>
-            </div>
-          </div>
-
-          {/* Medidores circulares inferiores - 6 fases restantes */}
-          <div className="flex justify-between items-center">
-            {projectData.progress_phases.slice(6).map((phase, index) => (
-              <div key={phase.id} className="flex flex-col items-center relative">
-                <div className="text-xs text-center mb-2 max-w-[70px] leading-tight text-gray-600">
-                  {phase.name}
-                </div>
-                
-                {/* Seta azul indicando próxima atividade (fase 7 - Anteprojeto) */}
-                {index === 1 && (
-                  <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-                    <div className="text-blue-600 text-xl font-bold">↑</div>
-                  </div>
-                )}
-                
-                <DualCircularProgress
-                  previsto={phase.previsto}
-                  realizado={phase.realizado}
-                  size={70}
-                  showPercentage={true}
-                  showOnlyInternal={true}
-                />
-                <div className="text-sm font-bold text-gray-700 mt-2">{phase.previsto}%</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Timeline de Progresso integrada com Monday.com */}
+      <MondayTimeline 
+        timelineData={timelineData}
+        isLoading={mondayLoading}
+        error={mondayError}
+        onRefetch={refetchMonday}
+      />
 
       {/* Seção Financeira */}
       <div className="mb-6">
